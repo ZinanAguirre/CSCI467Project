@@ -1,6 +1,7 @@
 import torch
+from collections import defaultdict
 
-def remove(saved, layer, node):
+def removeNode(saved, layer, node):
     # remove row from current layer weight
     saved[layer-1][0] = torch.cat([saved[layer-1][0][:node], saved[layer-1][0][node+1:]], dim=0)
     # remove element from current layer bias
@@ -8,18 +9,41 @@ def remove(saved, layer, node):
     # remove column from next layer weight
     saved[layer][0] = torch.cat([saved[layer][0][:, :node], saved[layer][0][:, node+1:]], dim=1)
 
+def removeNodes(saved, removals):
+    by_layer = defaultdict(set)
+    for layer, node in removals:
+        by_layer[layer].add(node)
+
+    for layer, nodes in by_layer.items():
+        keep = [i for i in range(saved[layer - 1][0].shape[0]) if i not in nodes]
+        saved[layer - 1][0] = saved[layer - 1][0][keep]
+        saved[layer - 1][1] = saved[layer - 1][1][keep]
+        saved[layer][0]     = saved[layer][0][:, keep]
+
 def leastweight(saved):
     layer = 0
     node = 0
     v = torch.inf
     for l in range(1,len(saved)):
-        importance = saved[l][0].abs().sum(dim=0)
+        importance = saved[l][0].abs().mean(dim=0)
         if v >= min(importance).item():
             v = min(importance).item()
             layer = l
             node = importance.argmin().item()
     return layer, node
 
+def leastweightRank(saved, minimum):
+    #pass in list of saved weights
+    #pass in minimum required nodes per layer
+    rankings = []
+    for l in range(1, len(saved)):
+        if saved[l][0].shape[1] > minimum:
+            importance = saved[l][0].abs().mean(dim=0)
+            for k, score in enumerate(importance):
+                rankings.append((score.item(), l, k))
+    
+    rankings.sort(key=lambda x: x[0])
+    return [(l, k) for _, l, k in rankings]
 
 
 def least_magnitude_filters_per_layer(saved, prune_rate=0.10):
