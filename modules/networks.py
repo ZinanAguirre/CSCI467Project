@@ -16,6 +16,36 @@ class Lenet(nn.Module):
     def forward(self, x):
         x = x.flatten(1)
         return self.linear_relu_stack(x)
+    
+class Conv2(nn.Module):
+  def __init__(self, in_channels=3, c1=64, c2=64,
+                 fc1=256, fc2=256, out=10, spatial=16):
+        super().__init__()
+        self.spatial = spatial
+ 
+      
+        self.conv_stack = nn.Sequential(
+            nn.Conv2d(in_channels, c1, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(c1, c2, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),  
+        )
+ 
+       
+        fc_in = c2 * spatial * spatial
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(fc_in, fc1),
+            nn.ReLU(),
+            nn.Linear(fc1, fc2),
+            nn.ReLU(),
+            nn.Linear(fc2, out),
+        )
+ 
+  def forward(self, x):
+    x = self.conv_stack(x)
+    x = x.flatten(1)
+    return self.linear_relu_stack(x)
 
 
 def train(dataloader, model, loss_fn, optimizer, device):
