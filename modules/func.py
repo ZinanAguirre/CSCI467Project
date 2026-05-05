@@ -33,18 +33,22 @@ def leastweight(saved):
     return layer, node
 
 def leastweightRank(saved, minimum):
-    #pass in list of saved weights
-    #pass in minimum required nodes per layer
     rankings = []
     for l in range(1, len(saved)):
-        if saved[l][0].shape[1] > minimum:
-            importance = saved[l][0].abs().mean(dim=0)
-            for k, score in enumerate(importance):
-                rankings.append((score.item(), l, k))
-    
-    rankings.sort(key=lambda x: x[0])
-    return [(l, k) for _, l, k in rankings]
+        importance = saved[l][0].abs().mean(dim=0)
+        for k, score in enumerate(importance):
+            rankings.append((score.item(), l, k))
 
+    rankings.sort(key=lambda x: x[0])
+
+    layer_counts = {l: saved[l][0].shape[1] for l in range(1, len(saved))}
+    result = []
+    for score, l, k in rankings:
+        if layer_counts[l] > minimum:
+            result.append((l, k))
+            layer_counts[l] -= 1
+
+    return result
 
 def least_magnitude_filters_per_layer(saved, prune_rate=0.10):
   to_remove = []
