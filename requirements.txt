@@ -24,6 +24,7 @@ filelock @ file:///Users/ec2-user/croot/filelock_1769440498570/work
 fonttools @ file:///Users/ec2-user/croot/fonttools_1774256492180/work
 fsspec==2026.2.0
 gmpy2 @ file:///opt/miniconda3/conda-bld/gmpy2_1764747892573/work
+graphviz==0.21
 h11 @ file:///opt/miniconda3/conda-bld/h11_1761931260823/work
 html5lib @ file:///Users/ktietz/demo/mc3/conda-bld/html5lib_1629144453894/work
 httpcore @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_941yf7p5zt/croot/httpcore_1748526061031/work
@@ -104,7 +105,9 @@ threadpoolctl @ file:///opt/miniconda3/conda-bld/threadpoolctl_1764361580622/wor
 tinycss2 @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_47tkvt_wcv/croot/tinycss2_1738338622484/work
 torch==2.2.2
 torchvision==0.17.2
+torchviz==0.0.3
 tornado @ file:///Users/ec2-user/croot/tornado_1774303634539/work
+tqdm==4.67.3
 traitlets @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_500m2_1wyk/croot/traitlets_1718227071952/work
 typing_extensions @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_dffmcwqo6o/croot/typing_extensions_1756281471323/work
 urllib3 @ file:///Users/ec2-user/croot/urllib3_1767810410716/work
